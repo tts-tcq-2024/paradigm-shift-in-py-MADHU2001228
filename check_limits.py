@@ -4,7 +4,7 @@ def is_BatteryTemperature_Ok(temperature):
         return False
     return True
 
-def is_BatterySoc_Ok(soc):
+def is_BatterySoc_Ok(soc): #state of charge
     if soc < 20 or soc > 80:
         print("State of Charge out of range!")
         return False
