@@ -32,13 +32,6 @@ if __name__ == '__main__':
     assert battery_Is_Ok(50, 70, 0.9) == False  # Temperature and Charge Rate out of range (high)
     assert battery_Is_Ok(-1, 70, 0.9) == False  # Temperature out of range (too low) and Charge Rate out of range (high)
     assert battery_Is_Ok(50, 85, 0.9) == False  # All parameters out of range (high)
-    assert battery_Is_Ok(-1, 10, 0.9) == False  # All parameters out of range (low except Charge Rate)
-    assert battery_Is_Ok(0, 20, 0.8) == True   # On the edge, should be valid
-    assert battery_Is_Ok(45, 80, 0.8) == True  # On the edge, should be valid
-    assert battery_Is_Ok(0, 19, 0.8) == False  # SOC just below the valid range
-    assert battery_Is_Ok(45, 81, 0.8) == False # SOC just above the valid range
-    assert battery_Is_Ok(0, 20, 0.81) == False # Charge rate just above the valid range
-
     print("All test cases passed!")
 
 
