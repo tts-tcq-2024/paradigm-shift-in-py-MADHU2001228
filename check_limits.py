@@ -1,14 +1,14 @@
-def is_BatteryTemperature_Ok(temperature):
-    if temperature < 0 or temperature > 45:
-        print("Temperature out of range!")
+def is_within_range(value, min_value, max_value, parameter_name):
+    if value < min_value or value > max_value:
+        print(f"{parameter_name} out of range!") 
         return False
     return True
 
-def is_BatterySoc_Ok(soc): #state of charge
-    if soc < 20 or soc > 80:
-        print("State of Charge out of range!")
-        return False
-    return True
+def is_BatteryTemperature_Ok(temperature):
+    return is_within_range(temperature, 0, 45, "Temperature")
+
+def is_BatterySoc_Ok(soc):  # state of charge
+    return is_within_range(soc, 20, 80, "State of Charge")
 
 def is_BatteryChargeRate_Ok(chargeRate):
     if chargeRate > 0.8:
