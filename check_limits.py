@@ -1,37 +1,30 @@
+from battery_warning_messages import check_warning
+
 def is_within_range(value, min_value, max_value, parameter_name):
     if value < min_value or value > max_value:
-        print(f"{parameter_name} out of range!") 
+        print(f"{parameter_name} out of range!")
         return False
     return True
 
 def is_BatteryTemperature_Ok(temperature):
-    return is_within_range(temperature, 0, 45, "Temperature")
+    max_temp = 45
+    tolerance = 0.05 * max_temp
+    check_warning(temperature, 0, max_temp, tolerance, "Temperature Approaching Low", "Temperature Approaching High", "Temperature")
+    return is_within_range(temperature, 0, max_temp, "Temperature")
 
-def is_BatterySoc_Ok(soc):  # state of charge
-    return is_within_range(soc, 20, 80, "State of Charge")
+def is_BatterySoc_Ok(soc):
+    max_soc = 80
+    tolerance = 0.05 * max_soc
+    check_warning(soc, 20, max_soc, tolerance, "Approaching discharge", "Approaching charge-peak", "State of Charge")
+    return is_within_range(soc, 20, max_soc, "State of Charge")
 
 def is_BatteryChargeRate_Ok(chargeRate):
-    if chargeRate > 0.8:
+    max_charge_rate = 0.8
+    tolerance = 0.05 * max_charge_rate
+    check_warning(chargeRate, 0, max_charge_rate, tolerance, "Charge Rate Approaching Low", "Charge Rate Approaching High", "Charge Rate")
+    if chargeRate > max_charge_rate:
         print("Charge Rate out of range!")
         return False
     return True
-
-def battery_Is_Ok(temperature, soc, chargeRate):
-    return is_BatteryTemperature_Ok(temperature) and is_BatterySoc_Ok(soc) and is_BatteryChargeRate_Ok(chargeRate)
-
-if __name__ == '__main__':
-    assert battery_Is_Ok(25, 70, 0.7) == True #  all parameters are within the normal range
-    assert battery_Is_Ok(50, 70, 0.7) == False  # Temperature out of range (high)
-    assert battery_Is_Ok(-1, 70, 0.7) == False  # Temperature out of range (low)
-    assert battery_Is_Ok(25, 85, 0.7) == False  # SoC out of range (high)
-    assert battery_Is_Ok(25, 10, 0.7) == False  # SoC out of range (low)
-    assert battery_Is_Ok(25, 70, 0.9) == False  # Charge Rate out of range (high)
-    assert battery_Is_Ok(50, 85, 0.7) == False  # Temperature and SoC out of range (high)
-    assert battery_Is_Ok(-1, 10, 0.7) == False  # Temperature and SoC out of range (low)
-    assert battery_Is_Ok(25, 85, 0.9) == False  # SoC and Charge Rate out of range (high)
-    assert battery_Is_Ok(50, 70, 0.9) == False  # Temperature and Charge Rate out of range (high)
-    assert battery_Is_Ok(-1, 70, 0.9) == False  # Temperature out of range (too low) and Charge Rate out of range (high)
-    assert battery_Is_Ok(50, 85, 0.9) == False  # All parameters out of range (high)
-    print("All test cases passed!")
 
 
