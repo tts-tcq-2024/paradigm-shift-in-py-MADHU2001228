@@ -1,18 +1,30 @@
+from battery_warning_messages import check_warning
 
-def battery_is_ok(temperature, soc, charge_rate):
-  if temperature < 0 or temperature > 45:
-    print('Temperature is out of range!')
-    return False
-  elif soc < 20 or soc > 80:
-    print('State of Charge is out of range!')
-    return False
-  elif charge_rate > 0.8:
-    print('Charge rate is out of range!')
-    return False
+def is_within_range(value, min_value, max_value, parameter_name):
+    if value < min_value or value > max_value:
+        print(f"{parameter_name} out of range!")
+        return False
+    return True
 
-  return True
+def is_BatteryTemperature_Ok(temperature):
+    max_temp = 45
+    tolerance = 0.05 * max_temp
+    check_warning(temperature, 0, max_temp, tolerance, "Temperature Approaching Low", "Temperature Approaching High", "Temperature")
+    return is_within_range(temperature, 0, max_temp, "Temperature")
+
+def is_BatterySoc_Ok(soc):
+    max_soc = 80
+    tolerance = 0.05 * max_soc
+    check_warning(soc, 20, max_soc, tolerance, "Approaching discharge", "Approaching charge-peak", "State of Charge")
+    return is_within_range(soc, 20, max_soc, "State of Charge")
+
+def is_BatteryChargeRate_Ok(chargeRate):
+    max_charge_rate = 0.8
+    tolerance = 0.05 * max_charge_rate
+    check_warning(chargeRate, 0, max_charge_rate, tolerance, "Charge Rate Approaching Low", "Charge Rate Approaching High", "Charge Rate")
+    if chargeRate > max_charge_rate:
+        print("Charge Rate out of range!")
+        return False
+    return True
 
 
-if __name__ == '__main__':
-  assert(battery_is_ok(25, 70, 0.7) is True)
-  assert(battery_is_ok(50, 85, 0) is False)
